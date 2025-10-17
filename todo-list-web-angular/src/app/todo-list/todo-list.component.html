@@ -1,0 +1,46 @@
+<div class="lista-tarefas">
+    <h1>Minha Lista de Tarefas</h1>
+    <div class="controles">
+        <input 
+            [(ngModel)]="tarefaInput" 
+            type="text" 
+            placeholder="Adicione uma tarefa"
+            (keypress)="onKeyPress($event)">
+        <button class="meu-botao" (click)="adicionarTarefa()">Adicionar</button>
+    </div>
+    
+    <div class="ordenacao">
+        <label for="ordenacao">Ordenar por:</label>
+        <select id="ordenacao" (change)="mudarOrdenacao($event)" [(ngModel)]="tipoOrdenacao">
+            <option value="data">Data (mais recente)</option>
+            <option value="alfabetica">Ordem alfabética</option>
+            <option value="concluidas">Não concluídas primeiro</option>
+            <option value="prioridade">Prioridade (estrelas)</option>
+        </select>
+    </div>
+
+    <ul>
+                <li *ngFor="let tarefa of tarefas; let i = index" 
+                        [class.concluida]="tarefa.concluida">
+                        <div class="tarefa-conteudo">
+                                <input 
+                                        type="checkbox" 
+                                        [checked]="tarefa.concluida"
+                                        (change)="toggleConcluida(i)">
+                                <span class="tarefa-texto">{{ tarefa.texto }}</span>
+                                <span class="tarefa-data">{{ tarefa.data | date:'short' }}</span>
+                                <span class="tarefa-prioridade">
+                                    <ng-container *ngFor="let star of [1,2,3,4,5]">
+                                        <span 
+                                            class="estrela" 
+                                            [class.ativa]="star <= tarefa.prioridade"
+                                            (click)="setPrioridade(i, star)"
+                                            title="Prioridade: {{star}} estrela{{star > 1 ? 's' : ''}}"
+                                        >&#9733;</span>
+                                    </ng-container>
+                                </span>
+                        </div>
+                        <button class="meu-botao excluir" (click)="excluirTarefa(i)">Excluir</button>
+                </li>
+    </ul>
+</div>
